@@ -13,7 +13,6 @@ Riddhi Dutta Problem list
 7) rate limiter
 8) messaging queue
 9) distributed cache
-10) online aution system
 
 Additional TODOs:
 amazon
