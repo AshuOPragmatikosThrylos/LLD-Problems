@@ -10,7 +10,7 @@
 | 8  | Digital Wallet                             |        |
 | 9  | Online Stock Brokerage                     |        |
 | 10 | University Course Registration             |        |
-| 11 | Text Editor/Word Processor/MS Word         |        |
+| 11 | Text Editor/Word Processor/MS Word         |  ✔     |
 | 12 | Apply Coupons in Shopping Cart             |        |
 |----|--------------------------------------------|--------|
 | 13 | Online Auction Management                  |        |
