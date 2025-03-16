@@ -27,27 +27,29 @@
 | 23 | Jigsaw Puzzle                              |        |
 |----|--------------------------------------------|--------|
 | 24 | Pub Sub                                    |        |
-| 25 | Meeting Scheduler                          |        |
-| 26 | Hashmap Implementation                     |        |
-| 27 | Concurrency Control in Distributed Systems |        |
-| 28 | Rate Limiter                               |        |
-| 29 | Messaging Queue                            |        |
-| 30 | Cache using LRU                            |        |
-| 31 | Distributed Cache                          |        |
+| 25 | Meeting Scheduler                          |  ✔     |
+| 26 | Job Scheduler                              |        |
+| 27 | Hashmap Implementation                     |        |
+| 28 | Concurrency Control in Distributed Systems |        |
+| 29 | Rate Limiter                               |        |
+| 30 | Messaging Queue                            |        |
+| 31 | Cache using LRU                            |        |
+| 32 | Distributed Cache                          |        |
 |----|--------------------------------------------|--------|
-| 32 | Stack Overflow                             |        |
-| 33 | JIRA                                       |        |
-| 34 | Car Rental (ZoomCar)                       |        |
-| 35 | Car Pooling (Uber)                         |        |
-| 36 | Ride Sharing (Uber)                        |        |
-| 37 | Concert Ticket Booking                     |        |
-| 38 | Movie Ticket Booking (BookMyShow)          |        |
-| 39 | Splitwise                                  |        |
-| 40 | CricInfo/CricBuzz                          |        |
-| 41 | Food Delivery (Swiggy)                     |        |
-| 42 | Music Streaming (Spotify)                  |        |
-| 43 | Amazon Locker Service                      |        |
-| 44 | Amazon                                     |        |
-| 45 | ChatGPT                                    |        |
-| 46 | LinkedIn                                   |        |
-| 47 | Facebook                                   |        |
+| 33 | Stack Overflow                             |        |
+| 34 | JIRA                                       |        |
+| 35 | Car Rental (ZoomCar)                       |        |
+| 36 | Car Pooling (Uber)                         |        |
+| 37 | Ride Sharing (Uber)                        |        |
+| 38 | Concert Ticket Booking                     |        |
+| 39 | Movie Ticket Booking (BookMyShow)          |        |
+| 40 | Splitwise                                  |        |
+| 41 | CricInfo/CricBuzz                          |        |
+| 42 | Food Delivery (Swiggy)                     |        |
+| 43 | Music Streaming (Spotify)                  |        |
+| 44 | Amazon Locker Service                      |        |
+| 45 | Amazon                                     |        |
+| 46 | ChatGPT                                    |        |
+| 47 | LinkedIn                                   |        |
+| 48 | Facebook                                   |        |
+| 49 | Zephyr Enterprise                          |        |
