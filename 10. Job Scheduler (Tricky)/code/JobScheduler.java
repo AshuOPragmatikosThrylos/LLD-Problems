@@ -31,6 +31,7 @@ public class JobScheduler {
     private Map<String, List<String>> dependencies;
     private Set<String> completedJobs;
     private List<JobListener> listeners;
+    private JobQueue jobQueue;
     private final Map<String, ScheduledFuture<?>> recurringJobs = new ConcurrentHashMap<>();
     private final Map<String, Boolean> jobStatus = new ConcurrentHashMap<>();
 
@@ -39,6 +40,7 @@ public class JobScheduler {
         dependencies = new HashMap<>();
         completedJobs = new HashSet<>();
         listeners = new ArrayList<>();
+        jobQueue = new JobQueue();
     }
 
     public void addListener(JobListener listener) {
@@ -60,8 +62,13 @@ public class JobScheduler {
                 : new ImmediateExecutionStrategy();
         JobExecutor executor = new JobExecutor(strategy);
 
+        jobQueue.addJob(job);
+
         executorService.schedule(() -> {
-                executeWithDependencies(job, executor);
+            Job nextJob = jobQueue.getNextJob();
+            if (nextJob != null) {
+                executeWithDependencies(nextJob, executor);
+            }
         }, delay, unit);
     }
 
