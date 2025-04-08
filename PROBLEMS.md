@@ -29,7 +29,7 @@
 | 24 | Pub Sub                                    |        |
 | 25 | Meeting Scheduler                          |  ✔     |
 | 26 | Job Scheduler                              |  ✔     |
-| 27 | Hashmap Implementation                     |        |
+| 27 | Hashmap Implementation                     |  ✔     |
 | 28 | Concurrency Control in Distributed Systems |        |
 | 29 | Rate Limiter                               |        |
 | 30 | Messaging Queue                            |        |
