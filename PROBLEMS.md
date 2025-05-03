@@ -1,7 +1,7 @@
 | #  | Problem                                    | Status |
 |----|--------------------------------------------|--------|
 | 1  | Vending Machine                            |        |
-| 2  | Elevator                                   |        |
+| 2  | Elevator System                            |  ✔     |
 | 3  | Logging Framework                          |  ✔     |
 | 4  | Parking Lot                                |  ✔     |
 | 5  | Coffee Vending Machine                     |        |
