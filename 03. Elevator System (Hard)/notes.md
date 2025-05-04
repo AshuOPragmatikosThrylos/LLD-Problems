@@ -1,5 +1,6 @@
 1. Shrayansh Jain
-https://drive.google.com/file/d/1iqqbroO-Mid4WFzUku9QXFROd_g5YXBK/view?usp=sharing
+- https://drive.google.com/file/d/1iqqbroO-Mid4WFzUku9QXFROd_g5YXBK/view?usp=sharing
+- https://gitlab.com/shrayansh8/interviewcodingpractise/-/tree/main/src/main/java/com/conceptandcoding/LowLevelDesign/LLDElevatorDesign?ref_type=heads
 
 Req clarification?
 1. How many lifts to be considered?
