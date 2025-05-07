@@ -4,7 +4,7 @@
 | 2  | Elevator System                            |  ✔     |
 | 3  | Logging Framework                          |  ✔     |
 | 4  | Parking Lot                                |  ✔     |
-| 5  | Coffee Vending Machine                     |        |
+| 5  | Coffee Machine                             |  ✔     |
 | 6  | Traffic Signal Control                     |        |
 | 7  | ATM                                        |        |
 | 8  | Digital Wallet                             |        |

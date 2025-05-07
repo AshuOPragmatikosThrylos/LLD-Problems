@@ -103,3 +103,10 @@ Multiple elevators; user presses the destination floor in the hall
 ---------------------------------------------------------------------
 - https://youtu.be/_2Vpjniu5fM
 - https://github.com/ashishps1/awesome-low-level-design/tree/main/solutions/java/src/elevatorsystem
+
+
+
+Key features or our design
+1. supports concurrency
+2. multiple elevators
+3. request type - destination floor from inside the elevator

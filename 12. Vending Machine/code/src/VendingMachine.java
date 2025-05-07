@@ -7,6 +7,7 @@ import Interfaces.State;
 import enums.Coin;
 import stateImpl.Idle;
 
+// (Context: VendingMachine) has (state: vendingMachineState)
 public class VendingMachine {
     private State vendingMachineState;
     private Inventory inventory;
