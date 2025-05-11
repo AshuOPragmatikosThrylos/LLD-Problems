@@ -26,7 +26,7 @@
 | 22 | Online Blackjack                           |        |
 | 23 | Jigsaw Puzzle                              |        |
 |----|--------------------------------------------|--------|
-| 24 | Pub Sub                                    |        |
+| 24 | Pub Sub                                    |  ✔     |
 | 25 | Meeting Scheduler                          |  ✔     |
 | 26 | Job Scheduler                              |  ✔     |
 | 27 | Hashmap Implementation                     |  ✔     |
