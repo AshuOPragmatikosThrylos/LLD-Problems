@@ -9,7 +9,6 @@ public class Topic {
     private final String topicName;
     private final String topicId;
 
-    // This list is exposed to the outside using an immutable getter
     private final List<Message> messages;
 
     public Topic(final String topicName, final String topicId) {
@@ -30,7 +29,7 @@ public class Topic {
         messages.add(message);
     }
 
-    public synchronized List<Message> getMessages() {
-        return Collections.unmodifiableList(messages);
+    public synchronized List<Message> getMessages() { // immutable getter
+        return Collections.unmodifiableList(messages); // passing as read only list
     }
 }

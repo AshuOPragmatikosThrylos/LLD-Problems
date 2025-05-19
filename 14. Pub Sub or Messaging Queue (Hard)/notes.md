@@ -1,5 +1,5 @@
-MQ (RabbitMQ) is P2P
-Pub Sub (Kafka) could be N-M
+MQ (RabbitMQ) - message delivery from queue to consumer is P2P (1 message to only 1 consumer)
+Pub Sub (Kafka) - could be 1-M
 
 - for asynchronous communication
 
@@ -46,6 +46,8 @@ need of TopicSubscriber class - cuz subscriber need to store offset for each top
 
 54:26 - resetting of offset leads to consumption from starting but automatically even without a new message being published?? Yess cuz resetting offset notifies all current subscribers...Refer resetOffset()
 
+resetting offset helps in replaying the messages
+
 Topics maintain a list of subscribers (observers) and notify them asynchronously when a new message is published => Observer DP
 
 Kafka Controller serves as the broker
@@ -54,6 +56,29 @@ Kafka Controller serves as the broker
       A subscriber doesn’t need to know or care who the publisher is
 - Broker enables independent scaling of publishers and subscribers
 
-
 https://github.com/AshuOPragmatikosThrylos/Design-Patterns-Practice/tree/master/02.%20Observer
+https://codewitharyan.com/tech-blogs/design-pub-sub-model-like-kafka
+
+https://youtu.be/7gMm0iQNZGA (Imp)
+Apache Kafka vs MQ
+1. Basic Functionality - unlike MQ Kafka does not immediately remove a processed message from a topic
+2. Broadcasting
+    * MQ - each message in the Q can be processed only by a single consumer
+    * Kafka - each message in the topic is processed by every subscribed consumer group
+3. Message Ordering
+    * MQ - no guarantee that messages will be processed by the same consumer in the same order they were added in the queue
+    * Kafka - ordering guarantees when read from same partition
+4. Message replay
+    * MQ - does not allow replay
+    * Kafka - It does not remove messages as soon as they are read and it maintains offset => replay possible
+5. Consumer Limit
+    * MQ - No limit
+    * Kafka - Max number of consumers (within a single consumer group) of a topic == number of partitions in a topic
+
+
+
+
 https://youtu.be/4BEzgPlLKTo
+https://youtu.be/rhybuOqsbD8
+
+
