@@ -21,32 +21,33 @@
 | 18 | Inventory Management                       |        |
 |----|--------------------------------------------|--------|
 | 19 | Tic Tac Toe                                |  ✔     |
-| 20 | Snake and Ladder                           |        |
-| 21 | Chess                                      |        |
-| 22 | Online Blackjack                           |        |
-| 23 | Jigsaw Puzzle                              |        |
+| 20 | Snake and Ladder                           |  ✔     |
+| 21 | Snake and Food                             |        |
+| 22 | Chess                                      |        |
+| 23 | Online Blackjack                           |        |
+| 24 | Jigsaw Puzzle                              |        |
 |----|--------------------------------------------|--------|
-| 24 | Pub Sub/ Messaging Queue                   |  ✔     |
-| 25 | Meeting Scheduler                          |  ✔     |
-| 26 | Job Scheduler                              |  ✔     |
-| 27 | Hashmap Implementation                     |  ✔     |
-| 28 | Rate Limiter                               |        |
-| 29 | Cache using LRU                            |        |
-| 30 | Distributed Cache                          |        |
+| 25 | Pub Sub/ Messaging Queue                   |  ✔     |
+| 26 | Meeting Scheduler                          |  ✔     |
+| 27 | Job Scheduler                              |  ✔     |
+| 28 | Hashmap Implementation                     |  ✔     |
+| 29 | Rate Limiter                               |        |
+| 30 | Cache using LRU                            |        |
+| 31 | Distributed Cache                          |        |
 |----|--------------------------------------------|--------|
-| 31 | Stack Overflow                             |        |
-| 32 | JIRA                                       |        |
-| 33 | Car Rental (ZoomCar)                       |        |
-| 34 | Car Pooling (Uber)                         |        |
-| 35 | Ride Sharing (Uber)                        |        |
-| 36 | Movie Ticket Booking (BookMyShow)          |        |
-| 37 | Splitwise                                  |        |
-| 38 | CricInfo/CricBuzz                          |        |
-| 39 | Food Delivery (Swiggy)                     |        |
-| 40 | Music Streaming (Spotify)                  |        |
-| 41 | Amazon Locker Service                      |        |
-| 42 | Amazon                                     |        |
-| 43 | ChatGPT                                    |        |
-| 44 | LinkedIn                                   |        |
-| 45 | Facebook                                   |        |
-| 46 | Zephyr Enterprise                          |        |
+| 32 | Stack Overflow                             |        |
+| 33 | JIRA                                       |        |
+| 34 | Car Rental (ZoomCar)                       |        |
+| 35 | Car Pooling (Uber)                         |        |
+| 36 | Ride Sharing (Uber)                        |        |
+| 37 | Movie Ticket Booking (BookMyShow)          |        |
+| 38 | Splitwise                                  |        |
+| 39 | CricInfo/CricBuzz                          |        |
+| 40 | Food Delivery (Swiggy)                     |        |
+| 41 | Music Streaming (Spotify)                  |        |
+| 42 | Amazon Locker Service                      |        |
+| 43 | Amazon                                     |        |
+| 44 | ChatGPT                                    |        |
+| 45 | LinkedIn                                   |        |
+| 46 | Facebook                                   |        |
+| 47 | Zephyr Enterprise                          |        |
