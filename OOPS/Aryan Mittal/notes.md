@@ -156,7 +156,14 @@ Method in interfaces - public abstract (unless default, static, or private; note
 4. Limitations of abstract class over interface?
  - multiple inheritance cannot be achieved with abstract classes
 
- - IMP: same-name default methods in multiple interfaces cause a conflict, but Java avoids the diamond problem by forcing the implementing class to resolve it explicitly
+ - IMP: same-name default methods in multiple interfaces cause a conflict, but Java avoids the diamond problem by forcing (throwing compilation error) the implementing class to resolve it explicitly
+
+ | Scenario                                     | Allowed? | Why?                                     |
+| -------------------------------------------- | -------- | ---------------------------------------- |
+| Two interfaces with **same abstract method** | ✅ Yes    | One method implementation satisfies both |
+| Two interfaces with **default method**       | ❌ No     | Conflict — must override                 |
+| One interface, one class with same method    | ✅ Yes    | Class wins in method resolution          |
+
 
 5. When not to use interface?
  - when implementing classes share common state. data memebers in interface have many restrictions - Always public static final
