@@ -26,11 +26,11 @@ Interview questions
 - In that case the default constructor is not provided by Java. If we want we have to declare it explicitly
 
 3. What happens if u create an object of a subclass? Which constructor is called first?
-- parent class conatructor then subclass constructor --> ensures proper initialisation
+- parent class constructor then subclass constructor --> ensures proper initialisation
 
 4. What happens if a constructor is synchronized?
 - compilation error
-- Synchronization means no other thread should have simultaneous access. But before the complete execution of constructor the object (`this`) is not evcen created yet. And synchronization works by locking `this`. SO having synchronized in constructor is meaningless
+- Synchronization means no other thread should have simultaneous access. But before the complete execution of constructor the object (`this`) is not evcen created yet. And synchronization works by locking `this`. So having synchronized in constructor is meaningless
 
 5. Can a constructor be inherited?
 - No. If we need constructor of parent class from subclass we can call `super`
@@ -53,7 +53,7 @@ use cases
 Polymorphism
 
 Types
-1. Compile time/Satic polymorphism - Method overloading
+1. Compile time/Static polymorphism - Method overloading
 2. Runtime / Dynamic polymorphism - Method overriding
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -63,19 +63,25 @@ Types
 1. Single Inheritance
 2. Multi level Inheritance
 3. Heirarchical Inheritance
+```
       A
      / \
     B   C
+```
 3. Multiple Inheritance
+```
     B   C
     \   /
       D
+```
 - not supported by Java cuz it leads to diamond problem
+```
       A (has function f)
      / \
     B   C (B, C are children of A)
     \   /
       D (D is the child of B; D is the child of C)
+```
 
 Problem - D.f should call B.f or C.f ? if D does not override f
 
@@ -83,8 +89,8 @@ Solution: Make B and C abstract to force D to implement its own f()
 
 - can implement multiple interfaces but should extend only 1 of the child class of the root class cuz of the possibility of diamond problem
 
-purpose of inheritance - resuability of code following DRY principle
-disadvantage of inheritance - if parent is changed it might affect all or some of the children (O of SOLID principle - Open for extension; closed or modification)
+- purpose of inheritance - resuability of code following DRY principle
+- disadvantage of inheritance - if parent is changed it might affect all or some of the children (O of SOLID principle - Open for extension; closed or modification)
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Encapsulation
@@ -105,11 +111,13 @@ achieved by
 1. abstract class - cannot be instantiated
 2. interface
 
-- if the child class of an abstract class doesn not override all the abstract methods then the child class has to be declared abstract
+- if the child class of an abstract class does not override all the abstract methods then the child class has to be declared abstract
 
 
 - interfaces can now since java 8 have default and static methods
-- interfaces can now have since jav 9 have private methods as well
+- interfaces can now have since java 9 have private methods as well
+   * not visible to implementing class
+   * use-case: Shared logic for default/static methods
 - interfaces can have only static and final field. all fields in an interface are implicitly: public static final
 
 - abstract class have any variable type - final/non-final/static/non-static
@@ -138,7 +146,10 @@ Interface cannot have constructors cuz
   a) can have only static members
   b) constructors cannot initialise static members
 
-Method in interfaces - public abstract (unless default, static, or private; note not final)
+- Method in interfaces - public abstract (unless default, static, or private; note not final)
+- IMP
+   * if its default => not abstract => 2 interfaces with same name/signature default method could cause diamond problem
+   * but Java throws compilation error and forces override
 
 2. Can abstract class implement an interface? Usecase?
  - yes
@@ -150,13 +161,11 @@ Method in interfaces - public abstract (unless default, static, or private; note
  - Trying to instantiate an abstract class means creating an object with unimplemented methods, leading to undefined or erroneous behavior if called
  - If an abstract method is called, the program would crash due to missing implementation
 
- - an abstract class can have no asbtract methods; but
+ - an abstract class can have no abstract methods; but
  - if a class has even 1 abstract method, the class has to be declared abstract
 
 4. Limitations of abstract class over interface?
  - multiple inheritance cannot be achieved with abstract classes
-
- - IMP: same-name default methods in multiple interfaces cause a conflict, but Java avoids the diamond problem by forcing (throwing compilation error) the implementing class to resolve it explicitly
 
  | Scenario                                     | Allowed? | Why?                                     |
 | -------------------------------------------- | -------- | ---------------------------------------- |
@@ -166,12 +175,12 @@ Method in interfaces - public abstract (unless default, static, or private; note
 
 
 5. When not to use interface?
- - when implementing classes share common state. data memebers in interface have many restrictions - Always public static final
+ - when implementing classes share common state. data members in interface have many restrictions - Always public static final
 
 6. Why were default methods in interfaces introduced?
  - to allow adding new methods without breaking existing implementations
 
-7. Can a class implement an interface without overriding its default method? Yes
+7. Can a class implement an interface without overriding its default method? Yes. Infact that was the idea behind introducing them
 
 8. IMP: What happens if a class implements an interface with a default method and also inherits the same method from a superclass? Which one gets priority if any?
  - method from superclass
@@ -180,35 +189,41 @@ Method in interfaces - public abstract (unless default, static, or private; note
  - default methods in interfaces cannot have instance variables because interfaces cannot hold object-specific (instance) state
  - Interfaces cannot have non-constant (i.e., non-public static final) variables
 
-int x;                   // ❌ Error: must be initialized
-private int y = 5;       // ❌ Error: interfaces cannot have private variables
-protected String name;   // ❌ Error
-int z = 10;              // ✅ But it's implicitly public static final
+- int x;                   // ❌ Error: must be initialized
+- private int y = 5;       // ❌ Error: interfaces cannot have private variables; though can have private methods
+- protected String name;   // ❌ Error
+- int z = 10;              // ✅ But it's implicitly public static final
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Access modifiers
 
-protected - anywhere from same package; only from subclass if outside the package
-default - package-private
+- protected - anywhere from same package; only from subclass if outside the package
+- default - package-private
+
+IMP: note the diff
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 2:10:50 - Class diagram 
 - https://youtu.be/XPCG24lEGTo?list=PLpxM6m39X_t-Rk9lZVVD4U6JycAAIIEDW&t=7850
+- https://blog.algomaster.io/p/uml-class-diagram-explained-with-examples
+- Note: The direction of the association arrow is opposite to that of the others
+
+![different types of arrows](image.png)
 
 Relationship types
 
 Diff b/w association and aggregation
-association
- - friendship; no ownership implied
-aggregation
- - has-a relationship
- - whole contain reference of part
- - parts can exist independently of the whole. Ex: Team, Players
+- association
+ * friendship; no ownership implied
+- aggregation
+ * has-a relationship
+ * whole contain reference of part
+ * parts can exist independently of the whole. Ex: Team, Players
 
 Diff b/w aggregation and composition
-composition 
- - aggregation with full ownership
- - if whole is destroyed, parts cannot exist independently. Ex: House, rooms (Room object does not exist outside the context of the house)
+- composition 
+ * aggregation with full ownership
+ * if whole is destroyed, parts cannot exist independently. Ex: House, rooms (Room object does not exist outside the context of the house)
 
 
 Dependency 
@@ -229,6 +244,7 @@ Composition, Aggregation are not important and could be confusing
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Generics
 
+```
 class Test <T, U> {
   T objT;
   U objU;
@@ -246,11 +262,18 @@ Main {
       Test<Integer, String> obj = new Test<Integer, String> (15, "someString");
     }
 }
+```
 
 
 - Generics don't work with primitive types but only for reference types. can't use int but can use int[]
-- Generics eliminate the possibility of typecasting errors at run time
+- Benefit of generics: Generics eliminate the possibility of typecasting errors at run time
 
+```
+  class MyArrayList<T> {
+    private Object[] elements;
+
+    // member functions
+  }
 
   MyArrayList list1 = new MyArrayList();
   list1.add("Sachin");
@@ -265,17 +288,27 @@ Main {
   list2.add("Sachin");
   list2.add("Rahul");
   list2.add(10); // compile time error
+```
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Wildcards
+Wildcards (Tricky)
 
-? symbol used in generics to represent unknown type 
+? symbol used in generics to represent unknown type
 
-unbounded wildcard (?)
-upper-bound wildcard (? extends someType)
-lower-bound wilcard (? super someType)
+## Types of Wildcards
 
+| Wildcard        | Meaning                          | Use Case | Can Add?   | Can Read As    |
+| --------------- | -------------------------------- | -------- | -----------|--------------- |
+| `<?>`           | Unbounded (any type)             | Neutral  | ❌ No     | ✅ Object      |
+| `<? extends T>` | Upper-bounded (T & subclasses)   | Producer | ❌ No     | ✅ T           |
+| `<? super T>`   | Lower-bounded (T & superclasses) | Consumer | ✅ T      | ❌ Only Object |
 
+- by superclasses we mean - the 1 direct superclass and its ancestors
+- Wildcards do not allow additions usually because the compiler cannot guarantee type safety for the unknown type
+
+---
+
+```java
 class Fruit {}
 class Apple extends Fruit {}
 class Banana extends Fruit {}
@@ -283,72 +316,73 @@ class Banana extends Fruit {}
 List<Fruit> fruitBasket;
 List<Apple> appleBasket;
 List<Banana> bananaBasket;
+```
 
-### 1. `<?>` → **Unbounded wildcard (any type of list)**
+---
 
+## 1️⃣ Unbounded Wildcard `<?>`
+
+```java
 public void printBasket(List<?> basket) {
     for (Object item : basket) {
-        System.out.println(item);  // ✅ You can read as Object
+        System.out.println(item);  // ✅ Can read as Object
     }
-    // basket.add(new Apple()); ❌ Cannot add anything except null
+    // basket.add(new Apple()); ❌ Can't add anything (except null)
 }
+```
 
+- Accepts: `List<Apple>`, `List<Banana>`, or `List<Fruit>`
+- Cannot add anything — because we don’t know the exact type
 
-✔️ Works for `List<Apple>`, `List<Banana>`, or `List<Fruit>`
-❌ Cannot add anything — because we don’t know the exact type
+---
 
+## 2️⃣ Upper-Bounded Wildcard `<? extends Fruit>` – **Producer (read)**
 
-### 2. `<? extends Fruit>` → **Upper-bounded wildcard (Producer)**
-
+```java
 public void eatAll(List<? extends Fruit> basket) {
     for (Fruit f : basket) {
         System.out.println("Eating " + f);  // ✅ Safe to read as Fruit
     }
     // basket.add(new Apple()); ❌ Still can't add anything (except null)
 }
+```
 
+- Accepts: `List<Apple>`, `List<Banana>`, or `List<Fruit>`
+- Cannot add `new Apple()` or `new Banana()` (compiler doesn't know the exact subtype)
 
-✔️ Accepts `List<Apple>`, `List<Banana>`, or `List<Fruit>`
-❌ Cannot add `new Apple()` or `new Banana()` — we don’t know the *exact* subtype.
+---
 
+## 3️⃣ Lower-Bounded Wildcard `<? super Apple>` – **Consumer (write)**
 
-### 3. `<? super Apple>` → **Lower-bounded wildcard (Consumer)**
-
-
+```java
 public void addApple(List<? super Apple> basket) {
     basket.add(new Apple());  // ✅ Safe to add Apple or its subclasses
     // Fruit f = basket.get(0); ❌ Can't read as Apple or Fruit; only Object
 }
+```
 
+- Accepts: `List<Apple>` and `List<Fruit>` and even `List<Object>`
+- Does not accept: `List<Banana>`
 
-✔️ Accepts `List<Apple>` and `List<Fruit>` and even `List<Object>`
-✅ Can safely add `Apple`
-❌ Can only read items as `Object`, not `Apple`
+---
 
-
-### 🧠 PECS Rule (Mnemonic):
+## 💡 PECS Rule
 
 > **Producer Extends, Consumer Super**
 
-* If the method **produces** data → use `extends`
-* If the method **consumes** data → use `super`
+| Goal  | Use         | Reads As | Writes |
+| ----- | ----------- | -------- | ------ |
+| Read  | `? extends` | ✅ T      | ❌ No   |
+| Write | `? super`   | ❌ Object | ✅ T    |
 
-| Wildcard        | Accepts            | Can Read | Can Write |
-| --------------- | ------------------ | -------- | --------- |
-| `<?>`           | Any type           | ✅ Object | ❌         |
-| `<? extends T>` | T and subclasses   | ✅ T      | ❌         |
-| `<? super T>`   | T and superclasses | ❌ Object | ✅ T       |
-
-
-- Wildcards do not allow additions usually because the compiler cannot guarantee type safety for the unknown type
-
+---
 
 Generic vs Wildcards
 
 | Feature             | Generics (`<T>`)                  | Wildcards (`<?>`)                             |
 | ------------------- | --------------------------------- | --------------------------------------------- |
 | **Type Usage**      | You define/use a specific type    | You use unknown/limited types                 |
-| **Flexibility**     | Less flexible — fixed type        | More flexible — supports type ranges          |
+| **Type Flexibility**| Less flexible — fixed type        | More flexible — supports type ranges          |
 | **Declaration**     | Used in class/method declarations | Used in method **calls/parameters**           |
 | **Read/Write**      | You can safely read/write         | Read or write depends on bounds               |
 
