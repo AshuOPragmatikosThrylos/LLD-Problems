@@ -1,33 +1,46 @@
 https://youtu.be/Rot2QnaUqBU
 
 
-4 cores - at a specific point in time only 4 threads can run
-does it mean only 4 tasks can run parallely? more than 4 can run on 4 cores because of virtualisation
+- 4 cores - at a specific point in time only 4 threads can run in true parallel (i.e., one per core)
+- does it mean only 4 tasks can run parallely? 
+   * Yes, at most 4 tasks/threads can run simultaneously in true parallel on 4 physical cores.
+   * But more than 4 can run overall via time slicing — the CPU rapidly switches between threads, giving the illusion of parallelism.
 
-Parallelism	4 threads running simultaneously on 4 cores
-Concurrency	10+ threads getting CPU time by rapid switching
+- Parallelism - Multiple threads/tasks running at the exact same time (e.g., 4 threads on 4 cores)
+- Concurrency - More threads than cores; threads take turns via context switching
 
 ![process vs thread](image.png)
 
 
 3 ways to create threads
 1) extending Thread class and override run()
-drawback - cannot extend any other class (multiple inheritance not supported by Java)
+- drawback - cannot extend any other class (multiple inheritance not supported by Java)
 
+```
     MyThread thread = new MyThread();
     thread.start();
+```
 
 2) implementing Runnable and override run()
 
+MyRunnable can be passed to multiple threads
+Good when the logic is large
+
+```
    class MyRunnable implements Runnable {}
 
     MyRunnable runnable = new MyRunnable();
     Thread thread = new Thread(runnable);
     thread.start();
+```
 
+or
+
+```
     new Thread(() -> {
     // code to run in thread
     }).start();
+```
 
 
 3) implementaing Callable<returnType> and override (call() : returnType)
@@ -35,6 +48,7 @@ drawback - cannot extend any other class (multiple inheritance not supported by 
 - unlike Runnable (void run()), Callable (call()) can return results and throw checked exceptions
 - Callable works with `ExecutorService` and `Future` objects to retrieve results after task completion
 
+```
     class MyCallable implements Callable<String> { 
      
         private final String name; 
@@ -46,7 +60,7 @@ drawback - cannot extend any other class (multiple inheritance not supported by 
         @Override 
         public String call() throws Exception { 
             //some code
-        } 
+        }
     } 
 
     ExecutorService executor = Executors.newFixedThreadPool(2); 
@@ -58,12 +72,13 @@ drawback - cannot extend any other class (multiple inheritance not supported by 
     Future<String> future2 = executor.submit(callable2); 
 
     future1.get(); // main thread is blocked until we get result of thread - Task 1 in future1
+```
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 Checked vs Unchecked Exceptions
 
-Checked - checked at compile time; require explicit handling through `throws` or try-catch. Ex: SQLException, IOException, ParseException, InterruptedException
+Checked - checked at compile time; require explicit handling through `throws` or try-catch. Ex: SQLException, IOException
 Unchecked - occurs due to logical errors in the program. Ex: NPE, ArrayIndexOutOfBoundsException
 
 
@@ -80,6 +95,7 @@ Interview questions
 - start() creates a new thread then calls run()
 - run() does not create a new thread and executes in current thread
 
+```
  main () {
     MyThread t1 = new MyThread();
     t1.start(); // starts a new thread
@@ -87,6 +103,7 @@ Interview questions
     MyThread t2 = new MyThread();
     t2.run(); // runs in main thread
 }
+```
 
 2) Can start() be called twice on the same thread?
 - No. Doing so will give IllegalThreadStateException
@@ -122,7 +139,7 @@ Interview questions
 7) Can you use Callable with standard Thread objects? 
 - No, you cannot directly use Callable with the Thread class. Callable is designed to work with the ExecutorService framework. Thread class only accepts Runnable objects. However, you can adapt a Callable to work with Thread by creating a Runnable that executes the Callable and stores its result: 
 
-
+```
 class MyRunnable implements Runnable { 
     private Callable<Integer> callable; 
     public MyRunnable(Callable<Integer> callable) { 
@@ -137,7 +154,7 @@ class MyRunnable implements Runnable {
         } 
     } 
 }
-
+```
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Thread Lifecycle
 1) New
@@ -146,22 +163,26 @@ Thread Lifecycle
 4) Terminated
 
 Runnable - ready for execution/ waiting for CPU allocation
-Blocked - trying to enter CS but it was already locked
+Blocked - trying to enter CS (Critical Section) but it was already locked
 Waiting - waiting for some other thread to perform specific action; entered via methods like Object.wait(), Thread.join()
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Thread Pool - collection of REUSABLE threads
 
+```
     // Create a fixed thread pool with 3 threads 
     ExecutorService executorService = Executors.newFixedThreadPool(3); 
+```
 
+```
     // Submit a task to the thread pool 
     executorService.submit(new WorkerThread(i)); 
-    
+```
  
+```
     // Shutdown the executor service 
     executorService.shutdown(); 
-
+```
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Thread Pool Lifecycle
 
@@ -170,7 +191,7 @@ Thread Pool Lifecycle
 
 An idle thread in the pool executes the task 
 The thread's state changes according to task operations (RUNNABLE, RUNNING, BLOCKED, WAITING, etc.) 
-After task completion, the thread returns to the pool (RUNNABLE state waiting for next task) 
+After task completion, the thread returns to the pool (RUNNABLE state waiting for next task)
 
 3. Pool Shutdown: During shutdown, threads complete their current tasks and are eventually terminated
 
@@ -187,6 +208,7 @@ re-interrupting to let someone else know and accordingly handle the interruption
 
 2. Avoid thread leaks by ensuring threads don't get stuck in WAITING or BLOCKED states. Use timeouts
 
+```
 class SafeLock { 
     private final Object lock = new Object(); 
  
@@ -208,6 +230,7 @@ public class ThreadLeakExample {
         new Thread(safeLock::waitForSignal, "WorkerThread").start(); 
     } 
 }
+```
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Thread Pool Types
@@ -240,6 +263,7 @@ Interview questions
 
 ![Which Thread Pool to use when?](image-1.png)
 
+```
 ExecutorService executor = new ThreadPoolExecutor(
     2,                                  // corePoolSize - Minimum number of threads to keep alive, even if idle
     4,                                  // maximumPoolSize
@@ -247,7 +271,9 @@ ExecutorService executor = new ThreadPoolExecutor(
     TimeUnit.SECONDS,                   // Time unit for keepAliveTime
     new LinkedBlockingQueue<Runnable>() // Queue to hold tasks before they're executed. E.g., LinkedBlockingQueue, ArrayBlockingQueue
 );
+```
 
+```
 ThreadPoolExecutor executor = new ThreadPoolExecutor(
     corePoolSize,      // Minimum number of threads to keep alive
     maximumPoolSize,   // Maximum number of threads allowed
@@ -257,14 +283,24 @@ ThreadPoolExecutor executor = new ThreadPoolExecutor(
     threadFactory,     // Factory for creating new threads
     rejectionHandler   // Handler for rejected tasks
 );
+```
 
-- How It Works Internally
+- How It Works Internally (IMP)
   * If current threads < corePoolSize → a new thread is created
   * Else if the queue isn’t full → task goes into the queue
   * Else if current threads < maximumPoolSize → new thread created
   * Else → task is rejected (based on RejectedExecutionHandler)
 
-4. How does a thread pool executor queue size affect its behavior?
+- RejectedExecutionHandler is an interface in Java used by ThreadPoolExecutor to define what should happen when a task is rejected from being executed
+
+| Class                   | Behavior                                                                 |
+| ----------------------- | ------------------------------------------------------------------------ |
+| `AbortPolicy` (default) | Throws `RejectedExecutionException`                                      |
+| `DiscardPolicy`         | Silently discards the rejected task                                      |
+| `DiscardOldestPolicy`   | Discards the oldest task in the queue and tries to re-submit the new one |
+
+
+4. How does a thread pool executor queue size affect its behavior? (IMP)
 - more queue size => can hold more pending tasks => new threads are spawned only after queue is full => delayed execution for those added in queue at the last
 - less queue size - frequent task rejections
 
@@ -272,7 +308,9 @@ ThreadPoolExecutor executor = new ThreadPoolExecutor(
 - `shutdown()` – **Gracefully** stops accepting new tasks and lets running/pending ones finish
 - `shutdownNow()` – **Forcibly** tries to stop all tasks immediately and returns a list of queued (awaiting execution) tasks
 
-    - List<Runnable> pendingTasks = executor.shutdownNow();
+```
+  List<Runnable> pendingTasks = executor.shutdownNow();
+```
 
 6. Can a thread in TIMED_WAITING state move directly to TERMINATED state?
 Yes. that's true for thread being in any state
@@ -286,20 +324,23 @@ Yes. that's true for thread being in any state
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Thread Executors
 
+```
 ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 scheduler.schedule(() -> {
     System.out.println("Executed after 3 seconds!");
 }, 3, TimeUnit.SECONDS);
+```
 ‍
 - can delay task execution or schedule it periodically - useful for cron-like jobs or time-based tasks
 - If the task throws an exception, it won’t run again
 
 
-
+```
 ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 scheduler.scheduleAtFixedRate(() -> {
     System.out.println("Running every 2 seconds");
 }, 0, 2, TimeUnit.SECONDS); // initialDelay, period
+```
 
 - allows you to schedule tasks to run after a delay or at a fixed rate - ideal for repeated jobs like health checks or polling
 - If a task throws an exception, it stops future executions
@@ -307,8 +348,8 @@ scheduler.scheduleAtFixedRate(() -> {
 
 
 Monitoring using Thread Executors
-- executor.getActiveCount()
-- executor.getQueue().size()
+```executor.getActiveCount()```
+```executor.getQueue().size()```
 
 
 - Executor interface
@@ -316,24 +357,25 @@ Monitoring using Thread Executors
 - ThreadPoolExecutor implements ExecutorService
 - ScheduledThreadPoolExecutor implements ScheduledExecutorService
 
+```
 ScheduledThreadPoolExecutor scheduledPool = new ScheduledThreadPoolExecutor(1);
 scheduledPool.schedule(() -> System.out.println("Scheduled once"), 5, TimeUnit.SECONDS);
+```
 
 - Executors: Factory class for creating executor instances
-
-ExecutorService fixedPool = Executors.newFixedThreadPool(3);
-ScheduledExecutorService scheduled = Executors.newScheduledThreadPool(1);
+```ExecutorService fixedPool = Executors.newFixedThreadPool(3);```
+```ScheduledExecutorService scheduled = Executors.newScheduledThreadPool(1);```
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Essential Methods of ExecutorService 
 
 execute() vs submit()
 
-executor.execute(() -> System.out.println("Task executed"));
+```executor.execute(() -> System.out.println("Task executed"));```
   - accepts only Runnable
   - returns nothing
 
-Future<String> future = executor.submit(() -> "Hello from Callable");
+```Future<String> future = executor.submit(() -> "Hello from Callable");```
   - accepts Runnable or Callable
   - returns Future
   - can block and get the result using future.get()
@@ -341,8 +383,8 @@ Future<String> future = executor.submit(() -> "Hello from Callable");
   - You can still check future.isCancelled() or future.isDone()
 
 
-List<Future<String>> results = executor.invokeAll(tasks);
-List<Future<String>> timeoutResults = executor.invokeAll(allTasks, 1, TimeUnit.SECONDS); // can mention timeout (optional)
+```List<Future<String>> results = executor.invokeAll(tasks);```
+```List<Future<String>> timeoutResults = executor.invokeAll(allTasks, 1, TimeUnit.SECONDS); // can mention timeout (optional)```
 - Runs all tasks in parallel
 - Waits until all finish
 - You get a list of Futures
@@ -361,17 +403,20 @@ Interview questions
  - might lead to memory leak and eventually resource exhausation
 
 3. Diff b/w scheduleAtFixedRate() and scheduleWithFixedDelay() ?
-* `scheduleAtFixedRate`: Runs tasks at a fixed rate; may **overlap** if a task runs long
-* `scheduleWithFixedDelay`: Runs tasks with a fixed **delay after each completes**; no overlap
+* `scheduleAtFixedRate`: Runs tasks at a fixed rate; may overlap if a task runs long
+* `scheduleWithFixedDelay`: Runs tasks with a fixed delay **after each completes**; no overlap
 
 4. How can you handle exceptions thrown by tasks submitted to an ExecutorService?
-submit()	Use Future.get() to catch exception
+- use submit() and not execute
+- use Future.get() to catch exception
 
+```
 try {
     future.get(); // This will throw ExecutionException
 } catch (ExecutionException e) {
     System.out.println("Caught: " + e.getCause());
 }
+```
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Thread Synchronization
@@ -380,10 +425,10 @@ Thread Synchronization
 - Declaring a method as synchronized locks the object (or class for static methods) before execution and releases it after the method completes
 
 2) synchronized block
-- Use a `synchronized` block instead of a method when only part of the code needs locking—this lets other threads run non-critical code without waiting
+- Use a `synchronized` block instead of a method when only part of the code needs locking — this lets other threads run non-critical code without waiting
 - used in Pub Sub design
 
-
+```
 public class CounterSyncBlock { 
     private int count = 0; 
 
@@ -405,33 +450,57 @@ public class CounterSyncBlock {
         System.out.println("Non-Synchronized part (post-processing): " + Thread.currentThread().getName()); 
     } 
 }
+```
 
 Volatile
-- A `volatile` variable is always read from and written to main memory, ensuring updates by one thread are instantly visible to others
+- A `volatile` variable is always read from and written to main memory, ensuring updates by one thread are instantly visible to other threads
 - Operations on a volatile variable cannot be re-ordered relative to each other
+- does not guarantee atomicity
+- `volatile int count++;` is not thread-safe — why?
+    * Even though count is declared volatile, the expression `count++` is not atomic
 - Use Cases
    * Flags & Status Signals (e.g., shutdown flags)
    * Double-Checked Locking in singletons https://github.com/AshuOPragmatikosThrylos/Design-Patterns-Practice/blob/master/08.%20Singleton/Better%20Code/Singleton.java
+
+- In multi-threaded programs, the Java Memory Model (JMM) allows certain instructions to be reordered for performance reasons. But with volatile, the JVM and CPU are told: "Don’t reorder any reads/writes of this variable — always see the latest value, in the correct order."
 
 Atomic
 - Atomic variables offer 
    - simple, lock-free, thread-safe operations 
    - on single variables (not part of complex objects)
-   - using CAS (Compare-And-Swap) under the hood
+   - using CAS (Compare-And-Swap - low-level atomic CPU instructions) under the hood
 - uses Compare-And-Swap (CAS) at the JVM level via Unsafe class
 - CAS retries if the variable was modified in the meantime
 - Lock-free operations are non-blocking, allowing threads to proceed without waiting, thereby eliminating the risk of deadlock
 
+simplified flow of `incrementAndGet()`:
+
+```
+int prev, next;
+do {
+    prev = get();              // read the current value
+    next = prev + 1;           // compute new value
+} while (!compareAndSet(prev, next));  // try to set it using CAS
+```
+
+- If another thread has already changed the value in between, compareAndSet() fails, and the loop retries
+- This retry loop is how thread-safety is achieved without locks
+
+
 Instead of 
 
+```
 synchronized(lock) {
    count++;
 }
+```
 
 below can be used
 
+```
 AtomicInteger count = new AtomicInteger(0);
 count.incrementAndGet();
+```
 
 
 | Class                | For                                    |
@@ -443,10 +512,10 @@ count.incrementAndGet();
 | `AtomicIntegerArray` | For int arrays                         |
 
 
-get()
-set(x)
-getAndIncrement() / incrementAndGet()
-getAndAdd(x) / addAndGet(x)
+- get()
+- set(x)
+- getAndIncrement() (like Post-increment (x++)) / incrementAndGet()
+- getAndAdd(x) / addAndGet(x)
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Thread Communication
@@ -456,27 +525,29 @@ Thread Communication
 - Threads typically wait in a loop, checking a shared condition to handle spurious wakeups
 - IMP: Spurious wakeups are unexpected returns from wait() (due to JVM/OS optimizations), so threads must check conditions in a loop 
 
+```
 synchronized (lock) {
     while (!condition) {  // re-check the condition
         lock.wait();
     }
 }
-
+```
 
 Interview questions
 1. Can you explain the producer-consumer problem and how to solve it using thread communication? 
 - A shared bounded buffer (or queue) is used to store the items. The challenge is to coordinate the producer and consumer so that:
     * The producer waits when the buffer is full (to avoid overfilling)
     * The consumer waits when the buffer is empty (to avoid consuming a non-existent item)
-- Inter-thread communication methods—wait(), notify(), and notifyAll()—are used to achieve this coordination
+- Inter-thread communication methods - wait(), notify(), and notifyAll() - are used to achieve this coordination
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Locks
 
 #### **1. Why Use Locks?**
 
-* **`synchronized`** is simple but has limitations: no timeout, no try-lock, no interruptible waits
-* `java.util.concurrent.locks.Lock` provides **more control** over locking.
+- `synchronized` is simple but has limitations: no timeout, no try-lock, no interruptible waits
+    * when used, the Java runtime uses an intrinsic lock (also called a monitor lock) that is part of every Java object
+- `java.util.concurrent.locks.Lock` provides more control through explicit locking
 
 ---
 
@@ -484,11 +555,11 @@ Locks
 
 Key methods:
 
-lock();                      // Blocks until lock acquired
-unlock();                    // Releases the lock
-tryLock();                   // checks availability and acquires the lock only if it's free, without blocking otherwise returns false
-tryLock(timeout, unit);      // Waits up to timeout
-lockInterruptibly();         // Can respond to interrupt
+- lock();                      // Blocks until lock acquired
+- unlock();                    // Releases the lock
+- tryLock();                   // checks availability and acquires the lock only if it's free, without blocking otherwise returns false
+- tryLock(timeout, unit);      // Waits up to timeout
+- lockInterruptibly();         // Can respond to interrupt
 
 ---
 
@@ -519,6 +590,7 @@ So technically, this is a special case of deadlock, but not a cyclic one between
 
 Example:
 
+```
 Lock lock = new ReentrantLock();
 
 lock.lock();
@@ -527,6 +599,7 @@ try {
 } finally {
    lock.unlock(); // IMP: Always unlock in finally block
 }
+```
 
 ---
 
@@ -538,9 +611,11 @@ try {
   * Multiple **read locks** at the same time
   * Only **one write lock**, and no read locks during write
 
+```
 ReentrantReadWriteLock rwLock = new ReentrantReadWriteLock();
 Lock readLock = rwLock.readLock();
 Lock writeLock = rwLock.writeLock();
+```
 
 ---
 
@@ -562,20 +637,19 @@ Lock writeLock = rwLock.writeLock();
 
 #### **6. Common Mistakes**
 
-* **Forgetting `unlock()`** → can cause deadlock. Always use in `finally`.
-* **Locking order inconsistency** → leads to deadlocks between threads.
+* **Forgetting `unlock()`** → can cause deadlock. Always use in `finally`
+* **Locking order inconsistency** → leads to deadlocks between threads
 
 ---
 
 #### **7. Best Practices**
 
-* Prefer `ReentrantLock` if you need:
-
+- Prefer `ReentrantLock` if you need:
   * Timeout
   * Interruptibility
   * Explicit control
-* Use `synchronized` when possible for simplicity.
-* Use `ReentrantReadWriteLock` for heavy-read scenarios.
+- Use `synchronized` when possible for simplicity
+- Use `ReentrantReadWriteLock` for heavy-read scenarios
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Semaphore
@@ -596,12 +670,15 @@ Use case of semaphores
 
 Binary semaphore/mutex, lock --> all 3 are one and the same --> all 3 give mutually exclusive access to the CS
 
+```
 Semaphore mutex = new Semaphore(1);
 mutex.acquire(); 
 mutex.release();
-
+```
+```
 Counting Semaphore/ Semaphore
 Semaphore resourcePool = new Semaphore(3);
+```
 
 Binary semaphore/mutex is a speacial case of Counting Semaphore/ Semaphore
 
@@ -686,13 +763,15 @@ Java Concurrent Collections
     * Swap: If and only if the current value in memory equals the expected value, it writes a new value into that memory location else retries operation
     * In Java, the method compareAndSet from classes like AtomicReference encapsulates this operation
 
+```
 AtomicReference<Node> ref = new AtomicReference<>(currentNode); 
 boolean isUpdated = ref.compareAndSet(currentNode, newNode);
-
+```
+-  CAS writes a new value at the hardware level - but at the data structure level, this simply means atomically updating a pointer (like head or tail)
 - ConcurrentLinkedDequeue used in Design Bounded Blocking Queue
 
 - Diff b/w CopyOnWriteArrayList and ConcurrentLinkedQueue
-    * Unlike a CopyOnWriteArrayList—which creates a new copy of the underlying array on every write—the ConcurrentLinkedQueue only modifies pointers (or references)
+    * Unlike a CopyOnWriteArrayList - which creates a new copy of the underlying array on every write - the ConcurrentLinkedQueue only modifies pointers (or references)
     * This makes updates generally more efficient, especially when writes are frequent
     * There is no overhead of copying the entire data structure, and memory usage remains more stable
 
@@ -728,60 +807,69 @@ Fail-Fast vs Fail-Safe iterators
 - Fail-fast is for detecting bugs, fail-safe is for thread safety
 
 
-✅ ConcurrentHashMap is almost always preferred over Hashtable due to better performance.
-✅ CopyOnWriteArrayList is ideal for rarely-modified, frequently-iterated lists.
-✅ BlockingQueues are essential for producer-consumer patterns.
+- ConcurrentHashMap is almost always preferred over Hashtable due to better performance
+- CopyOnWriteArrayList is ideal for rarely-modified, frequently-iterated lists
+- BlockingQueues are essential for producer-consumer patterns
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Future and CompletableFuture
 
+```
 ExecutorService executor = Executors.newSingleThreadExecutor();
-Future<Integer> future = executor.submit(() -> 10 + 20); // submit() starts the task asynchronously.
+Future<Integer> future = executor.submit(() -> 10 + 20); // submit() starts the task asynchronously
 Integer result = future.get();  // blocks main thread until result is ready
+```
 
-future.get(timeout, unit) adds a maximum wait time.
-- If the result isn’t ready in that time, it throws a TimeoutException, and your thread can recover gracefully instead of hanging forever
+- `future.get(timeout, unit)` adds a maximum wait time
+- If the result isn’t ready in that time, it throws a TimeoutException, and the thread can recover gracefully instead of hanging forever
 
 ----------------------------------------------
 
 future.isDone() // status check
 
 ----------------------------------------------
-
+```
 Future<?> future = executor.submit(() -> {
     while (true) {
         // long-running task
         if (Thread.currentThread().isInterrupted()) break;
     }
 });
+```
 
 
-boolean cancelled = future.cancel(true); // interrupt the thread; note: does not cancel job, just provides support for the same
-// Java doesn’t forcefully stop a thread — it just sets the interrupted flag
+`boolean cancelled = future.cancel(true);`
+- interrupt the thread; note: does not cancel job, just provides support for the same
+- Java doesn’t forcefully stop a thread — it just sets the interrupted flag
 
 ----------------------------------------------
 Limitations of Future
 1. No composition/chaining - cannot specify a dependent task that should execute once the Future completes
 2. No exception handling
-3. N completion callbacks -  cannot tell Java what to do after the task finishes, without waiting for it manually
+3. No completion callbacks -  cannot tell Java what to do after the task finishes, without waiting for it manually
 
-
-
+-----------------------------------------------------------------------------------------------------------------
+```
 CompletableFuture.supplyAsync(() -> "Hello from async!")
                     .thenAccept(result -> System.out.println("Result: " + result));
+```
 
-supplyAsync() runs the task in the background
-thenAccept() prints the result when it's ready
-Main thread continues execution without waiting (non-blocking) cuz thenAccept() is different from get()
+- supplyAsync() runs the task in the background
+- thenAccept() prints the result when it's ready
+- Main thread continues execution without waiting (non-blocking) cuz thenAccept() is different from get()
 
-
+-----------------------------------------------------------------------------------------------------------------
 thenApply
-
+```
 CompletableFuture<Integer> future = CompletableFuture
     .supplyAsync(() -> 5)
     .thenApply(x -> x * 2);  // returns 10
-
+```
+-----------------------------------------------------------------------------------------------------------------
 thenApplyAsync
+
+-----------------------------------------------------------------------------------------------------------------
+
 
 diff with thenAccept
 
@@ -790,7 +878,7 @@ diff with thenAccept
 | Purpose        | Transform and return value | Consume the value (side-effect) |
 | Input          | `Function<T, R>`           | `Consumer<T>`                   |
 | Return Type    | `CompletableFuture<R>`     | `CompletableFuture<Void>`       |
-| Returns Value? | ✅ Yes                      | ❌ No                            |
+| Returns Value? | ✅ Yes                     | ❌ No                          |
 
 
 
@@ -803,54 +891,64 @@ Key Features of CompletableFuture
 6. Explicit Completion: Can be completed explicitly, useful for complex scenarios
 
 
+- always use CompletableFuture over Future
+- CompletableFuture gives non blocking operation for chained tasks
 
-always use CompletableFuture over Future
-CompletableFuture gives non blocking operation for chained tasks
-
+```
 try {
     String result = future.get(); // Blocks until result is available // throws compile time/checked 
 } catch (InterruptedException | ExecutionException e) {}
+```
 
-String result = future.join(); // Blocks until result is available // throws unchecked/runtime
+`String result = future.join();` // Blocks until result is available // throws unchecked/runtime
 
-always prefer get over join....join looks clearer....but can throw runtime exceptions which we don't want in prod code
+- always prefer get over join....join looks clearer....but can throw runtime exceptions which we don't want in prod code
 
 
-future.complete("Manual Result");
+`future.complete("Manual Result");`
 - You want to complete a future manually (e.g., timeout fallback, mock)
 - If the future is already completed, complete() will return false
 
 
 // Combine results of two futures
+```
 CompletableFuture<String> combined = future1.thenCombine(future2, 
     (result1, result2) -> result1 + " + " + result2);       
 System.out.println("Combined result: " + combined.join());
+```
 
 // Wait for all futures to complete
+```
 CompletableFuture<Void> allOf = CompletableFuture.allOf(future1, future2);
 allOf.thenRun(() -> System.out.println("Both futures completed!"));
+```
 
 // Wait for any one future to complete
+```
 CompletableFuture<Object> anyOf = CompletableFuture.anyOf(future1, future2);
 System.out.println("First completed: " + anyOf.join());
+```
 
 
-
+```
 .exceptionally(ex -> {
 
 });
+```
 
+```
 .handle((result, ex) -> {
     if (ex != null) {
         return "Handled error: " + ex.getMessage();
     }
     return "Handled success: " + result;
 });
+```
 
 
-future.orTimeout(2, TimeUnit.SECONDS); 
-future.completeOnTimeout("Default value", 2, TimeUnit.SECONDS); 
-- If the original future doesn't complete within 2 seconds, this CompletableFuture will complete normally with the provided default value
+- `future.orTimeout(2, TimeUnit.SECONDS); `
+- `future.completeOnTimeout("Default value", 2, TimeUnit.SECONDS); `
+    * If the original future doesn't complete within 2 seconds, this CompletableFuture will complete normally with the provided default value
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Concurrency Problem

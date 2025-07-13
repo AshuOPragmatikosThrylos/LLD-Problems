@@ -6,9 +6,11 @@ constructor - used to initialize objects with some data for each attribute so th
 
 copy constructor - instead of parameters for the constructor, reference of another object is passed as argument
 
+```
 public Movie (Movie other) {
     this.attribute = other.attribute;
 }
+```
 
 private constructor - restrict object creation from outside the class. Use case: Singleton design pattern
 
